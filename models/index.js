@@ -7,9 +7,8 @@ function createAssociations(){
     Board.hasOne(User);
     Board.belongsToMany(Cheese, {through: 'Cheese_Board'});
     Cheese.belongsToMany(Board, {through: 'Cheese_Board'});
-
-
-
 }
+
+createAssociations();
 
 module.exports = {User, Board, Cheese};

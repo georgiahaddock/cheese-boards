@@ -22,7 +22,6 @@ Board.init({
             min: 0,
             max: 5
         }
-
     }
 },
 {

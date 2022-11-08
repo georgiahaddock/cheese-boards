@@ -1,13 +1,11 @@
 const User = require('../models/user.model.js');
 const Board = require('../models/board.model.js');
 const Cheese = require('../models/cheese.model.js');
-const index = require('../models/index.js');
 const {synchronise, db} = require('../src/db');
 
-
-beforeEach(async () => {
-    await synchronise();
-})
+beforeEach(() => {
+    synchronise();
+  });
 
 describe('testing User class', () => {
     test('user exists', async () => {
@@ -23,10 +21,9 @@ describe('testing User class', () => {
         const spicy = await Board.create({type: 'spicy'});
         const vegan = await Board.create({type: 'vegan'});
 
-        await u.addBoards([spicy, vegan]);
+        u.addBoards([spicy, vegan]);
 
-        expect(u.vegan).toBeTruthy();
-        expect(u.spicy).toBeTruthy();
+        expect(u.getBoards()).toBeTruthy();
     })
 })
 
@@ -39,11 +36,22 @@ describe('testing Board class', () => {
         expect(b.description).toBe('hot hot hot!!');
         expect(b.rating).toBe(3);
     })
+
+    test('a board can have only one user', async () => {
+        const b = await Board.create({type: 'extra pongy'});
+        const u1 = await User.create({name: 'Georgia'});
+        const u2 = await User.create({name: 'Porgia'});
+
+        b.setUser(u1);
+        b.setUser(u2);
+
+        const noOfUsers = await b.countUsers();
+        expect(noOfUsers).toBe(1);
+    })
 })
 
 describe('testing Cheese class', () => {
     test('cheese exists', async () => {
-        // await db.sync({force:true});
         const c = await Cheese.create({title: 'cheddar', description: 'the best cheese in the world'});
 
         expect(c.id).toBeTruthy();
